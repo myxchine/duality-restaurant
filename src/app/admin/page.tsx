@@ -8,6 +8,7 @@ import TimeTable from "@/components/elements/admin/dayView";
 import MainView from "@/components/elements/admin/mainView";
 import GetReservations from "@/components/getReservations";
 import NewResModal from "@/components/NewResModal";
+import Nav from "@/components/elements/admin/nav";
 
 const getCurrentDate = (): string => {
   const today = new Date();
@@ -21,6 +22,10 @@ const AdminPage = () => {
   const [reservations, setReservations] = useState([]);
   const [selectedDate, setSelectedDate] = useState<string>(getCurrentDate());
   const [newReservation, setNewReservation] = useState<boolean>(false);
+  const [view, setView] = useState<string>("main");
+  const [timeSlotsGuests, setTimeSlotsGuests] = useState<{
+    [key: string]: number;
+  }>({});
 
   <GetReservations
     reservations={reservations}
@@ -49,13 +54,24 @@ const AdminPage = () => {
       )}
       <Header />
       <main className="flex flex-col items-center justify-center h-max p-12 space-y-8">
-        <TimeTable selectedDate={selectedDate} />
-        <MainView
-          setReservations={setReservations}
-          reservations={reservations}
-          newReservation={newReservation}
-          setNewReservation={setNewReservation}
-        />
+        <Nav setView={setView} />
+        {view === "daily" && (
+          <TimeTable
+            reservations={reservations}
+            setTimeSlotsGuests={setTimeSlotsGuests}
+            timeSlotsGuests={timeSlotsGuests}
+            selectedDate={selectedDate}
+            setSelectedDate={setSelectedDate}
+          />
+        )}
+        {view === "main" && (
+          <MainView
+            setReservations={setReservations}
+            reservations={reservations}
+            newReservation={newReservation}
+            setNewReservation={setNewReservation}
+          />
+        )}
       </main>
       <Footer />
     </>
