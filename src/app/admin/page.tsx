@@ -1,21 +1,21 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { supabase } from "@/lib/supabase";
 import Link from "next/link";
 import Header from "@/components/elements/admin/header";
 import Footer from "@/components/elements/admin/footer";
+import { getRecentReservations } from "@/utils/queries";
 
 const AdminPage = () => {
   const [reservations, setReservations] = useState([]);
 
   useEffect(() => {
     const fetchReservations = async () => {
-      const { data, error } = await supabase.from("reservations").select("*");
-      if (error) {
-        console.error("Error fetching reservations:", error.message);
-      } else {
+      try {
+        const data = await getRecentReservations();
         setReservations(data);
+      } catch (error) {
+        console.error("Error fetching reservations:", error);
       }
     };
     fetchReservations();
