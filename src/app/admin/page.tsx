@@ -5,9 +5,20 @@ import Link from "next/link";
 import Header from "@/components/elements/admin/header";
 import Footer from "@/components/elements/admin/footer";
 import { getRecentReservations } from "@/utils/queries";
+import TimeTable from "@/components/elements/admin/dayView";
+import { get } from "http";
+
+const getCurrentDate = (): string => {
+  const today = new Date();
+  const year = today.getFullYear();
+  const month = String(today.getMonth() + 1).padStart(2, "0");
+  const day = String(today.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+};
 
 const AdminPage = () => {
   const [reservations, setReservations] = useState([]);
+  const [selectedDate, setSelectedDate] = useState<string>(getCurrentDate());
 
   useEffect(() => {
     const fetchReservations = async () => {
@@ -25,6 +36,7 @@ const AdminPage = () => {
     <>
       <Header />
       <main className="flex flex-col items-center justify-center h-max p-12 ">
+        <TimeTable selectedDate={selectedDate} />
         <div className=" rounded-lg p-8 shadow-md space-y-8 w-full bg-white bg-opacity-90">
           <h1 className="text-3xl font-bold">Reservations</h1>
           <table className="table-auto w-full space-y-4">

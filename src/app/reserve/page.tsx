@@ -8,7 +8,7 @@ const ReservationPage: React.FC = () => {
   };
 
   return (
-    <main className="flex flex-col items-center justify-center full-screen p-12 ">
+    <main className="flex flex-col items-center justify-center fixed full-screen p-12 ">
       <div className=" rounded-lg p-8 shadow-md space-y-6 w-full max-w-lg   bg-white bg-opacity-90">
         <h1 className="text-xl font-bold">Make your reservation</h1>
         <ReservationForm onSubmit={handleFormSubmit} />

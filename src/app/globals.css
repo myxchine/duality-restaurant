@@ -36,6 +36,6 @@ body {
   appearance: none;
   -webkit-appearance: none;
   -moz-appearance: none;
-
+  background-color: white;
   cursor: pointer;
 }
