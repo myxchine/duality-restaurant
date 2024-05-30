@@ -1,5 +1,3 @@
-"use client";
-
 import React, { useState, useEffect } from "react";
 import { supabase } from "@/lib/supabase";
 
@@ -19,7 +17,28 @@ const TimeTable: React.FC<{ selectedDate: string }> = ({ selectedDate }) => {
         }
 
         const bookedTimes = data.map((reservation: any) => reservation.time);
-        setBookedSlots(bookedTimes);
+        const extendedBookedTimes = bookedTimes.flatMap((time) => {
+          const [hours, minutes] = time.split(":").map(Number);
+          const startTime = hours * 60 + minutes;
+          const endTime = startTime + 90; // 1.5 hours in minutes
+
+          const extendedTimes = [];
+          for (let i = startTime; i < endTime; i += 15) {
+            const hours = Math.floor(i / 60);
+            const minutes = i % 60;
+            extendedTimes.push(
+              `${String(hours).padStart(2, "0")}:${String(minutes).padStart(
+                2,
+                "0"
+              )}`
+            );
+          }
+
+          return extendedTimes;
+        });
+
+        setBookedSlots(extendedBookedTimes);
+        console.log("Unavailable Time Slots:", extendedBookedTimes);
       } catch (error) {
         console.error("Error fetching booked slots:", error);
       }
@@ -49,23 +68,38 @@ const TimeTable: React.FC<{ selectedDate: string }> = ({ selectedDate }) => {
   const timeSlots = generateTimeSlots();
 
   return (
-    <table>
-      <caption> {selectedDate}</caption>
-      <thead>
-        <tr>
-          <th>Time</th>
-          <th>Status</th>
-        </tr>
-      </thead>
-      <tbody>
-        {timeSlots.map((timeSlot) => (
-          <tr key={timeSlot}>
-            <td>{timeSlot}</td>
-            <td>{bookedSlots.includes(timeSlot) ? "U" : "A"}</td>
+    <div className=" rounded-lg p-8 shadow-md w-full bg-white bg-opacity-30">
+      <h1 className="text-3xl font-bold uppercase">Day View</h1>
+      <h3 className="text-left"> {selectedDate}</h3>
+
+      <table className="table-auto w-full">
+        <thead>
+          <tr>
+            {timeSlots.map((timeSlot) => (
+              <th
+                className="text-xs min-w-2 font-regular p-2"
+                key={timeSlot}
+              ></th>
+            ))}
           </tr>
-        ))}
-      </tbody>
-    </table>
+        </thead>
+        <tbody className=" border rounded rounded-full overflow-hidden">
+          <tr className="">
+            {timeSlots.map((timeSlot) => (
+              <td className="text-xs font-regular" key={timeSlot}>
+                <div
+                  className={`h-12 ${
+                    bookedSlots.includes(timeSlot)
+                      ? "bg-green-500"
+                      : "bg-black bg-opacity-40"
+                  }`}
+                ></div>
+              </td>
+            ))}
+          </tr>
+        </tbody>
+      </table>
+    </div>
   );
 };
 

@@ -32,26 +32,50 @@ const formatShortDate = (date: Date): string => {
 const generateDateOptions = (): { value: string; label: string }[] => {
   const options = [];
   const today = new Date();
-  for (let i = 0; i < 8; i++) {
+
+  for (let i = -5; i <= 5; i++) {
     const date = new Date(today);
     date.setDate(date.getDate() + i);
+
     let label = "";
     if (i === 0) {
       label = "Today";
     } else if (i === 1) {
       label = "Tomorrow";
+    } else if (i === -1) {
+      label = "Yesterday";
     } else {
       label = formatShortDate(date);
     }
+
     options.push({ value: date.toISOString().split("T")[0], label });
   }
+
+  return options;
+};
+
+const generateTimeOptions = (): string[] => {
+  const options = [];
+  const endHour = 22;
+  const intervalsPerHour = 4;
+  const startHour = 9;
+
+  for (
+    let i = startHour * intervalsPerHour;
+    i <= endHour * intervalsPerHour;
+    i++
+  ) {
+    const hour = Math.floor(i / intervalsPerHour);
+    const minute = (i % intervalsPerHour) * 15;
+    const formattedHour = hour.toString().padStart(2, "0");
+    const formattedMinute = minute.toString().padStart(2, "0");
+    options.push(`${formattedHour}:${formattedMinute}`);
+  }
+
   return options;
 };
 
 const ReservationForm: React.FC<ReservationFormProps> = () => {
-  const [options, setOptions] = useState<{ value: string; label: string }[]>(
-    []
-  );
   const [formData, setFormData] = useState<ReservationFormData>({
     name: "",
     email: "",
@@ -59,33 +83,6 @@ const ReservationForm: React.FC<ReservationFormProps> = () => {
     time: "",
     guests: 1,
   });
-
-  useEffect(() => {
-    // Fetch current time
-    const today = new Date();
-    const currentHour = today.getHours();
-    const currentMinute = today.getMinutes();
-
-    // Calculate start time (current hour + 30 minutes)
-    let startTime = currentHour + Math.ceil((currentMinute + 30) / 15) / 4;
-    if (startTime > 22) startTime = 22; // Limit to 22:00
-    if (startTime < 8) startTime = 8; // Minimum is 8:00
-
-    // Generate options
-    for (let i = startTime * 4; i <= 22 * 4; i++) {
-      const hour = Math.floor(i / 4);
-      const minute = (i % 4) * 15;
-      const formattedHour = hour.toString().padStart(2, "0");
-      const formattedMinute = minute.toString().padStart(2, "0");
-      options.push(`${formattedHour}:${formattedMinute}`);
-    }
-
-    // Update form data with new options
-    setFormData((prevData) => ({
-      ...prevData,
-      time: options[0], // Set default time to first option
-    }));
-  }, []);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -126,7 +123,7 @@ const ReservationForm: React.FC<ReservationFormProps> = () => {
           id="name"
           name="name"
           className="w-full p-2 border rounded"
-          placeholder="Your Name..."
+          placeholder="Customer Name..."
           value={formData.name}
           onChange={handleChange}
           required
@@ -138,7 +135,7 @@ const ReservationForm: React.FC<ReservationFormProps> = () => {
           id="email"
           name="email"
           className="w-full p-2 border rounded"
-          placeholder="Your Email..."
+          placeholder="Customer Email..."
           value={formData.email}
           onChange={handleChange}
           required
@@ -170,15 +167,11 @@ const ReservationForm: React.FC<ReservationFormProps> = () => {
           onChange={handleChange}
           required
         >
-          {options && (
-            <>
-              {options.map((option) => (
-                <option key={option} value={option}>
-                  {option}
-                </option>
-              ))}
-            </>
-          )}
+          {generateTimeOptions().map((option) => (
+            <option key={option} value={option}>
+              {option}
+            </option>
+          ))}
         </select>
       </div>
       <div>
