@@ -61,3 +61,31 @@ export const generateDateOptions = (): { value: string; label: string }[] => {
   }
   return options;
 };
+
+export const getCurrentTimePlusHour = (addHours: number): string => {
+  const now = new Date();
+  now.setHours(now.getHours() + addHours);
+
+  const minutes = now.getMinutes();
+  const roundedMinutes = Math.ceil(minutes / 15) * 15;
+  if (roundedMinutes === 60) {
+    now.setHours(now.getHours() + 1);
+    now.setMinutes(0);
+  } else {
+    now.setMinutes(roundedMinutes);
+  }
+
+  return now.toTimeString().substr(0, 5); // Format as "HH:MM"
+};
+
+export const isTimeAtLeast30MinutesAway = (
+  date: string,
+  time: string
+): boolean => {
+  const now = new Date();
+  const selectedDateTime = new Date(`${date}T${time}`);
+
+  const differenceInMinutes = (selectedDateTime - now) / (1000 * 60);
+
+  return differenceInMinutes >= 30;
+};
