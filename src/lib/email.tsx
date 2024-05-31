@@ -13,17 +13,13 @@ interface EmailData {
   htmlContent: string;
 }
 
+const API_KEY: string = process.env.EMAIL_KEY;
+            
 export default async function sendBookingConfirmationEmail(
   customerName: string,
   customerEmail: string,
   reservationId: string
 ): Promise<boolean> {
-  const API_KEY: string | undefined = process.env.EMAIL_KEY;
-
-  if (!API_KEY) {
-    throw new Error("Email API key not found.");
-  }
-
   const confirmationEmailData: EmailData = {
     sender: { name: "Duality Management", email: "michael@duality.agency" },
     to: [{ name: customerName, email: customerEmail }],
