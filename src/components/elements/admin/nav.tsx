@@ -14,11 +14,11 @@ const Nav = ({ setView }: { setView: (view: string) => void }) => {
       </button>
       <button
         className="text-black text-opacity-100 bg-white bg-opacity-30 hover:text-red rounded p-4 shadow-md rounded-xl"
-        onClick={() => setView("daily")}
+        onClick={() => setView("manage")}
       >
         <div className="flex justify-center items-center space-x-2">
           <FiUser />
-          <p className="text-sm">DAILY VIEW</p>
+          <p className="text-sm">MANAGE</p>
         </div>
       </button>
     </div>

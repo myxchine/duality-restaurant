@@ -15,14 +15,11 @@ export default async function ProductPage({
 
   return (
     <main className="flex flex-col items-center justify-center fixed full-screen p-12 ">
-      <div className=" rounded-lg p-8 shadow-md space-y-6 w-full max-w-lg   bg-white bg-opacity-90">
+      <div className=" rounded-lg p-8 shadow-md space-y-6 w-full max-w-lg   bg-white bg-opacity-30">
         <div className="w-full space-y-2">
           <h1 className="text-2xl font-bold uppercase">
             {reservation.name}'s reservation
           </h1>
-          <p className="text-xs text-black text-opacity-50">
-            {reservation.email}
-          </p>
         </div>
         <div className="w-full space-y-2">
           <h2 className="text-xl font-bold">Details</h2>

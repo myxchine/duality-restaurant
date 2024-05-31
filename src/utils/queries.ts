@@ -39,3 +39,29 @@ export const getRecentReservations = async () => {
     throw error;
   }
 };
+
+export const getReservationsFromDate = async (date: string) => {
+  try {
+    const { data, error } = await supabase
+      .from("reservations")
+      .select("*")
+      .order("date", { ascending: false })
+      .gte("date", date);
+
+    if (error) {
+      throw error;
+    }
+
+    return data;
+  } catch (error) {
+    console.error("Error fetching reservations from date:", error);
+    throw error;
+  }
+};
+
+export interface Reservation {
+  date: string;
+  time: string;
+  guests: number;
+  status: string;
+}

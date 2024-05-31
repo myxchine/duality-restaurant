@@ -88,28 +88,31 @@ const TimeTable: React.FC<{
   return (
     <div className="space-y-8 w-full">
       <div className="rounded-lg p-8 shadow-md w-full bg-white bg-opacity-30 space-y-4">
-        <h1 className="text-3xl font-bold uppercase">Day View</h1>
+        <h1 className="text-xl font-bold uppercase">Day View</h1>
         <input
           type="date"
           value={selectedDate}
           onChange={(e) => setSelectedDate(e.target.value)}
-          className="bg-transparent border border-black border-1 rounded p-2"
+          className="bg-transparent text-xs"
         />
 
-        <table className="table-auto w-full">
+        <table className="table-auto w-full ">
           <thead>
             <tr>
               {timeSlots.map((timeSlot) => (
-                <th key={timeSlot}></th>
+                <th className="display-none" key={timeSlot}></th>
               ))}
             </tr>
           </thead>
-          <tbody className="border rounded rounded-full overflow-hidden">
+          <tbody className="rounded-full border overflow-hidden">
             <tr>
               {timeSlots.map((timeSlot) => (
-                <td className="text-xs font-regular" key={timeSlot}>
+                <td
+                  className="text-xs font-regular border-none p-0"
+                  key={timeSlot}
+                >
                   <div
-                    className="h-12 flex items-center justify-center"
+                    className="h-12 flex items-center bg-black bg-opacity-10 justify-center"
                     style={{
                       backgroundColor: getBackgroundColor(
                         timeSlotsGuests[timeSlot]
@@ -143,7 +146,7 @@ const TimeTable: React.FC<{
               ))
             ) : (
               <tr>
-                <td colSpan={7} className="text-center">
+                <td colSpan={8} className="text-center w-full py-12 text-xs ">
                   No reservations found
                 </td>
               </tr>

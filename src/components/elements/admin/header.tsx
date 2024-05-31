@@ -3,7 +3,7 @@ import Link from "next/link";
 const Header = () => {
   return (
     <header>
-      <div className=" bg-white bg-opacity-30 p-8 shadow-md w-full ">
+      <div className=" bg-transparent ">
         <Link href="/">
           <h1 className="text-2xl text-left font-bold text-opacity-10">
             DUALITY

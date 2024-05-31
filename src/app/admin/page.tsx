@@ -1,14 +1,15 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Header from "@/components/elements/admin/header";
 import Footer from "@/components/elements/admin/footer";
-import { getRecentReservations } from "@/utils/queries";
+import { Reservation } from "@/utils/queries";
 import TimeTable from "@/components/elements/admin/dayView";
 import MainView from "@/components/elements/admin/mainView";
 import GetReservations from "@/components/getReservations";
 import NewResModal from "@/components/NewResModal";
 import Nav from "@/components/elements/admin/nav";
+import Clock from "@/components/elements/admin/clock";
 
 const getCurrentDate = (): string => {
   const today = new Date();
@@ -22,27 +23,19 @@ const AdminPage = () => {
   const [reservations, setReservations] = useState([]);
   const [selectedDate, setSelectedDate] = useState<string>(getCurrentDate());
   const [newReservation, setNewReservation] = useState<boolean>(false);
+  const [todaysReservations, setTodaysReservations] = useState<{
+    [key: string]: Reservation;
+  }>({});
   const [view, setView] = useState<string>("main");
   const [timeSlotsGuests, setTimeSlotsGuests] = useState<{
-    [key: string]: number;
+    [key: string]: Reservation;
   }>({});
 
-  <GetReservations
-    reservations={reservations}
-    setReservations={setReservations}
-  />;
-
-  useEffect(() => {
-    const fetchReservations = async () => {
-      try {
-        const data = await getRecentReservations();
-        setReservations(data);
-      } catch (error) {
-        console.error("Error fetching reservations:", error);
-      }
-    };
-    fetchReservations();
-  }, []);
+  GetReservations({
+    setReservations,
+    setTodaysReservations,
+    selectedDate,
+  });
 
   return (
     <>
@@ -52,26 +45,31 @@ const AdminPage = () => {
           newReservation={newReservation}
         />
       )}
-      <Header />
-      <main className="flex flex-col items-center justify-center h-max p-12 space-y-8">
-        <Nav setView={setView} />
-        {view === "daily" && (
-          <TimeTable
-            reservations={reservations}
-            setTimeSlotsGuests={setTimeSlotsGuests}
-            timeSlotsGuests={timeSlotsGuests}
-            selectedDate={selectedDate}
-            setSelectedDate={setSelectedDate}
-          />
-        )}
-        {view === "main" && (
-          <MainView
-            setReservations={setReservations}
-            reservations={reservations}
-            newReservation={newReservation}
-            setNewReservation={setNewReservation}
-          />
-        )}
+      <main className="flex flex-col items-center justify-center w-full ">
+        <div className="max-w-7xl w-full flex flex-col items-center justify-center p-4 space-y-8 ">
+          <Header />
+          <Clock />
+
+          <Nav setView={setView} />
+
+          {view === "main" && (
+            <TimeTable
+              reservations={todaysReservations}
+              setTimeSlotsGuests={setTimeSlotsGuests}
+              timeSlotsGuests={timeSlotsGuests}
+              selectedDate={selectedDate}
+              setSelectedDate={setSelectedDate}
+            />
+          )}
+          {view === "manage" && (
+            <MainView
+              setReservations={setReservations}
+              reservations={reservations}
+              newReservation={newReservation}
+              setNewReservation={setNewReservation}
+            />
+          )}
+        </div>
       </main>
       <Footer />
     </>

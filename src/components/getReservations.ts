@@ -1,20 +1,48 @@
-import { getRecentReservations } from "@/utils/queries";
+"use client";
+
+import {
+  getRecentReservations,
+  getReservationsFromDate,
+  Reservation,
+} from "@/utils/queries";
 import { useEffect } from "react";
 
-const getReservations = async (reservations: any, setReservations: any) => {
+interface FetchReservationsDataParams {
+  setReservations: React.Dispatch<React.SetStateAction<Reservation[]>>;
+  setTodaysReservations: React.Dispatch<React.SetStateAction<Reservation[]>>;
+  selectedDate: string;
+}
+
+const fetchReservationsData = ({
+  setReservations,
+  setTodaysReservations,
+  selectedDate,
+}: FetchReservationsDataParams) => {
   useEffect(() => {
-    const fetchReservations = async () => {
+    const fetchRecent = async () => {
       try {
         const data = await getRecentReservations();
         setReservations(data);
       } catch (error) {
-        console.error("Error fetching reservations:", error);
+        console.error("Error fetching recent reservations:", error);
       }
     };
-    fetchReservations();
-  }, []);
+    fetchRecent();
+  }, [setReservations]);
 
-  return reservations;
+  useEffect(() => {
+    const fetchFromDate = async () => {
+      try {
+        const data = await getReservationsFromDate(selectedDate);
+        setTodaysReservations(data);
+      } catch (error) {
+        console.error("Error fetching reservations from date:", error);
+      }
+    };
+    if (selectedDate) {
+      fetchFromDate();
+    }
+  }, [selectedDate, setTodaysReservations]);
 };
 
-export default getReservations;
+export default fetchReservationsData;

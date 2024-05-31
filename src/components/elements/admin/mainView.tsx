@@ -44,7 +44,7 @@ const MainView = ({
   return (
     <div className="rounded-lg p-8 shadow-md space-y-8 w-full bg-white  bg-opacity-30">
       <div className="flex justify-between items-center space-x-4">
-        <h1 className="text-3xl font-bold uppercase ">Reservations</h1>
+        <h1 className="text-xl font-bold uppercase ">Reservations</h1>
         <div className="space-x-4">
           <button
             className="text-black text-opacity-100 hover:text-red rounded border-2 border-black p-2 "
@@ -116,8 +116,8 @@ const MainView = ({
                 </tr>
               ))
             ) : (
-              <tr>
-                <td colSpan={7} className="text-center">
+              <tr className="w-full">
+                <td colSpan={8} className="text-center w-full py-12 text-xs ">
                   No reservations found
                 </td>
               </tr>
