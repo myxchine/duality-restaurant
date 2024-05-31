@@ -13,13 +13,13 @@ interface EmailData {
   htmlContent: string;
 }
 
+const API_KEY: string = process.env.NEXT_PUBLIC_EMAIL_KEY;
+
 export default async function sendBookingConfirmationEmail(
   customerName: string,
   customerEmail: string,
   reservationId: string
 ): Promise<boolean> {
-  const API_KEY: string = process.env.NEXT_PUBLIC_EMAIL_KEY;
-
   const confirmationEmailData: EmailData = {
     sender: { name: "Duality Management", email: "michael@duality.agency" },
     to: [{ name: customerName, email: customerEmail }],
@@ -30,7 +30,7 @@ export default async function sendBookingConfirmationEmail(
         <p>Dear ${customerName},</p>
         <p>Thank you for your booking. Your reservation has been confirmed.</p>
         <p>You can view your booking details using the link below:</p>
-        <p><a href="https://duality-restaurant.vercel.app/reservation/${reservationId}">View your booking</a></p>
+        <p><a href="https://duality-restaurant.vercel.app/reservations/${reservationId}">View your booking</a></p>
         <p>Best regards,</p>
         <p>Duality Management</p>
       </body>
