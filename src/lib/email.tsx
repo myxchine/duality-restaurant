@@ -18,7 +18,7 @@ export default async function sendBookingConfirmationEmail(
   customerEmail: string,
   reservationId: string
 ): Promise<boolean> {
-  const API_KEY: string = process.env.EMAIL_KEY;
+  const API_KEY: string = process.env.NEXT_PUBLIC_EMAIL_KEY;
 
   const confirmationEmailData: EmailData = {
     sender: { name: "Duality Management", email: "michael@duality.agency" },
