@@ -9,7 +9,7 @@ const SubmitButton: React.FC<SubmitButtonProps> = ({ loading }) => (
     {!loading ? (
       <button
         type="submit"
-        className="w-full p-4 border rounded bg-black text-white hover:bg-white hover:text-black shadow-none border-black"
+        className="w-full p-4 border rounded bg-black text-white  shadow-none border-black"
       >
         Reserve now
       </button>
