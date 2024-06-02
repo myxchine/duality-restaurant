@@ -66,12 +66,12 @@ const AdminPage = () => {
         </div>
       </div>
 
-      <div className=" w-full space-y-2 border border-gray-300 rounded-lg">
+      <div className=" w-full space-y-2 ">
         {reservationsFromDate && reservationsFromDate.length > 0 ? (
           reservationsFromDate.map((reservation: any) => (
             <div
               key={reservation.id}
-              className="flex flex-col bg-white bg-opacity-50 md:flex-row md:justify-between w-full justify-center align-middle items-left text-center p-4 md:p-8 border-b border-gray-300 overflow-hidden"
+              className="flex flex-col bg-white bg-opacity-50 md:flex-row md:justify-between w-full justify-center align-middle items-left text-center p-4 md:p-8 border border-gray-300 rounded-lg  overflow-hidden"
             >
               <div className="flex items-center p-4 pt-0 pl-0 md:p-0">
                 <p className="">
