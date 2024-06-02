@@ -6,7 +6,6 @@ export default function Animations() {
     <Box>
       <Skeleton />
       <Skeleton animation="wave" />
-      <Skeleton animation={false} />
     </Box>
   );
 }

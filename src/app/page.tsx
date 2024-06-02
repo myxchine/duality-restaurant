@@ -1,8 +1,10 @@
 import Head from "next/head";
+import Header from "../components/page/header";
 
 export default function Home() {
   return (
-    <div>
+    <main>
+      <Header />
       <Head>
         <title>Restaurant Reservation Admin SaaS</title>
         <meta
@@ -92,6 +94,6 @@ export default function Home() {
           <p>&copy; 2024 [Your SaaS Name]. All rights reserved.</p>
         </div>
       </footer>
-    </div>
+    </main>
   );
 }
