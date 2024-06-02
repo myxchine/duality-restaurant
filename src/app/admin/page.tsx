@@ -1,15 +1,10 @@
 "use client";
 
-import { useState } from "react";
-import Header from "@/components/elements/admin/header";
-import Footer from "@/components/elements/admin/footer";
+import { useState, useContext } from "react";
+import { MyContext } from "./context";
 import { Reservation } from "@/utils/queries";
-import TimeTable from "@/components/elements/admin/dayView";
-import MainView from "@/components/elements/admin/mainView";
-import GetReservations from "@/components/getReservations";
-import NewResModal from "@/components/NewResModal";
-import Nav from "@/components/elements/admin/nav";
-import Clock from "@/components/elements/admin/clock";
+import TimeTable from "@/components/admin/dayView";
+import { get } from "http";
 
 const getCurrentDate = (): string => {
   const today = new Date();
@@ -20,59 +15,32 @@ const getCurrentDate = (): string => {
 };
 
 const AdminPage = () => {
-  const [reservations, setReservations] = useState([]);
+  const context = useContext(MyContext);
+  if (!context) {
+    throw new Error("MyContext must be used within a MyProvider");
+  }
   const [selectedDate, setSelectedDate] = useState<string>(getCurrentDate());
-  const [newReservation, setNewReservation] = useState<boolean>(false);
-  const [todaysReservations, setTodaysReservations] = useState<{
-    [key: string]: Reservation;
-  }>({});
-  const [view, setView] = useState<string>("main");
+
   const [timeSlotsGuests, setTimeSlotsGuests] = useState<{
     [key: string]: Reservation;
   }>({});
 
-  GetReservations({
-    setReservations,
-    setTodaysReservations,
-    selectedDate,
-  });
+  const { reservationsFromDate, getReservationsFromDateFromClient } = context;
+
+  //  getReservationsFromDateFromClient(selectedDate);
 
   return (
-    <>
-      {newReservation && (
-        <NewResModal
-          setNewReservation={setNewReservation}
-          newReservation={newReservation}
+    <main className="w-full">
+      <div className=" w-full flex flex-col items-center justify-center p-4 md:p-8 space-y-8 ">
+        <TimeTable
+          reservations={reservationsFromDate}
+          setTimeSlotsGuests={setTimeSlotsGuests}
+          timeSlotsGuests={timeSlotsGuests}
+          selectedDate={selectedDate}
+          setSelectedDate={setSelectedDate}
         />
-      )}
-      <main className="flex flex-col items-center justify-center w-full ">
-        <div className="max-w-7xl w-full flex flex-col items-center justify-center p-4 space-y-8 ">
-          <Header />
-          <Clock />
-
-          <Nav setView={setView} />
-
-          {view === "main" && (
-            <TimeTable
-              reservations={todaysReservations}
-              setTimeSlotsGuests={setTimeSlotsGuests}
-              timeSlotsGuests={timeSlotsGuests}
-              selectedDate={selectedDate}
-              setSelectedDate={setSelectedDate}
-            />
-          )}
-          {view === "manage" && (
-            <MainView
-              setReservations={setReservations}
-              reservations={reservations}
-              newReservation={newReservation}
-              setNewReservation={setNewReservation}
-            />
-          )}
-        </div>
-      </main>
-      <Footer />
-    </>
+      </div>
+    </main>
   );
 };
 

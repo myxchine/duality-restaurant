@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import ClientOnly from "./clientOnly";
 
 const Clock: React.FC = () => {
   const [time, setTime] = useState(new Date());
@@ -20,19 +21,12 @@ const Clock: React.FC = () => {
     return `${hours}:${minutes}:${seconds}`;
   };
 
-  const formatDate = (date: Date) => {
-    const day = String(date.getDate()).padStart(2, "0");
-    const month = date.toLocaleString("default", { month: "long" });
-    const year = date.getFullYear();
-    return `${day} ${month}, ${year}`;
-  };
-
   return (
-    <div>
-      <p>
-        {formatTime(time)} {formatDate(time)}
-      </p>
-    </div>
+    <ClientOnly>
+      <div>
+        <p>{formatTime(time)}</p>
+      </div>
+    </ClientOnly>
   );
 };
 

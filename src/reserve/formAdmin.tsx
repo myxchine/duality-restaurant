@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { supabase } from "../lib/supabase";
 
-interface ReservationFormProps {
-  onSubmit: (formData: ReservationFormData) => void;
-}
+interface ReservationFormProps {}
 
 export interface ReservationFormData {
   name: string;

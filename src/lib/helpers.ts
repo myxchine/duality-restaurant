@@ -62,6 +62,34 @@ export const generateDateOptions = (): { value: string; label: string }[] => {
   return options;
 };
 
+export const generateDateOptionsPlus = (): {
+  value: string;
+  label: string;
+}[] => {
+  const options = [];
+  const today = new Date();
+
+  for (let i = -5; i <= 5; i++) {
+    const date = new Date(today);
+    date.setDate(date.getDate() + i);
+
+    let label = "";
+    if (i === 0) {
+      label = "Today";
+    } else if (i === 1) {
+      label = "Tomorrow";
+    } else if (i === -1) {
+      label = "Yesterday";
+    } else {
+      label = formatShortDate(date);
+    }
+
+    options.push({ value: date.toISOString().split("T")[0], label });
+  }
+
+  return options;
+};
+
 export const getCurrentTimePlusHour = (addHours: number): string => {
   const now = new Date();
   now.setHours(now.getHours() + addHours);

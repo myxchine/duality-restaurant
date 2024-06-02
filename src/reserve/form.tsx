@@ -67,7 +67,7 @@ const ReservationForm: React.FC = () => {
         const newEmail = await Email(name, email, newReservationId);
 
         console.log("Reservation created with ID:", newReservationId);
-        router.push(`/reservations/${newReservationId}`);
+        router.push(`/reserve/${newReservationId}`);
       }
 
       setStatus("Reservation successfull.");

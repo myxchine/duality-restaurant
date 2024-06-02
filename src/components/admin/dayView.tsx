@@ -1,5 +1,7 @@
 import React, { useEffect } from "react";
 import { supabase } from "@/lib/supabase";
+import Time from "@/components/admin/time";
+import DateSelect from "@/reserve/form/DateSelectPlus";
 
 const TimeTable: React.FC<{
   selectedDate: string;
@@ -79,7 +81,7 @@ const TimeTable: React.FC<{
   const timeSlots = generateTimeSlots();
 
   const getBackgroundColor = (guests: number) => {
-    if (!guests) return "bg-black bg-opacity-40";
+    if (!guests) return "bg-gray-500";
     const red = Math.min(255, guests * 10); // Cap at 255
     const green = Math.max(0, 255 - guests * 10); // Decrease as guests increase
     return `rgb(${red}, ${green}, 0)`; // Green to Red gradient
@@ -87,13 +89,10 @@ const TimeTable: React.FC<{
 
   return (
     <div className="space-y-8 w-full">
-      <div className="rounded-lg p-8 shadow-md w-full bg-white bg-opacity-30 space-y-4">
-        <h1 className="text-xl font-bold uppercase">Day View</h1>
-        <input
-          type="date"
+      <div className="rounded-lg p-8 shadow-md w-full bg-white bg-opacity-50 space-y-2">
+        <DateSelect
           value={selectedDate}
           onChange={(e) => setSelectedDate(e.target.value)}
-          className="bg-transparent text-xs"
         />
 
         <table className="table-auto w-full ">
@@ -125,34 +124,34 @@ const TimeTable: React.FC<{
           </tbody>
         </table>
       </div>
-      <div className="rounded-lg p-8 shadow-md w-full bg-white bg-opacity-30">
-        <table className="table-auto w-full space-y-4 ">
-          <thead>
-            <tr className="text-left">
-              <th>Name</th>
-              <th>Guests</th>
-              <th>Status</th>
-            </tr>
-          </thead>
-          <tbody>
-            {reservations && reservations.length > 0 ? (
-              reservations.map((reservation: any) => (
-                <tr key={reservation.id} className="text-left border-b pb-4">
-                  <td className="p-4 pl-0">{reservation.name}</td>
-
-                  <td className="p-4 pl-0">{reservation.guests}</td>
-                  <td className="p-4 pl-0">{reservation.status}</td>
-                </tr>
-              ))
-            ) : (
-              <tr>
-                <td colSpan={8} className="text-center w-full py-12 text-xs ">
-                  No reservations found
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
+      <div className=" w-full min-h-[400px] space-y-2 ">
+        {reservations && reservations.length > 0 ? (
+          reservations.map((reservation: any) => (
+            <div
+              key={reservation.id}
+              className="flex flex-col bg-white bg-opacity-50 md:flex-row md:justify-between w-full justify-center align-middle items-left text-center p-8  shadow-md rounded-lg"
+            >
+              <div className="flex items-center p-4 pt-0 pl-0 md:p-0">
+                <p className="">
+                  {reservation.name} for {reservation.guests} at{" "}
+                  {reservation.time}
+                </p>
+              </div>
+              <div className="flex items-center space-x-2">
+                <div className="p-2 border bg-blue-400 text-white uppercase text-xs rounded-xl flex items-center justify-center w-[100px]">
+                  <Time targetTime={`${selectedDate}T${reservation.time}`} />
+                </div>
+                <div className="p-2 border bg-orange-400 text-white uppercase text-xs rounded-xl flex items-center justify-center w-[100px]">
+                  {reservation.status}
+                </div>
+              </div>
+            </div>
+          ))
+        ) : (
+          <div className="w-full  text-center font-bold rounded-lg py-8 bg-white bg-opacity-50">
+            Nothing yet
+          </div>
+        )}
       </div>
     </div>
   );
