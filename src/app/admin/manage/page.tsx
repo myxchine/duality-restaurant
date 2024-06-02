@@ -96,7 +96,7 @@ const MainView = () => {
                       />
                     </td>
                     <td className="text-black text-opacity-50 p-4 pl-0">
-                      <Link href={`/reservations/${reservation.id}`}>
+                      <Link href={`/reserve/${reservation.id}`}>
                         {truncateText(reservation.id, 4)}
                       </Link>
                     </td>

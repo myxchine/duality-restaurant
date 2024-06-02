@@ -15,7 +15,7 @@ export const getCurrentDate = (): string => {
 };
 
 export const formatShortDate = (date: Date): string => {
-  return date.toLocaleDateString("en-UK", {
+  return date.toLocaleDateString("en-GB", {
     weekday: "long",
     month: "short",
     day: "numeric",
@@ -26,8 +26,8 @@ export const generateTimeSlots = (
   start: number,
   end: number,
   interval: number
-) => {
-  const timeSlots = [];
+): string[] => {
+  const timeSlots: string[] = [];
   let current = start;
 
   while (current < end) {
@@ -44,12 +44,14 @@ export const generateTimeSlots = (
 };
 
 export const generateDateOptions = (): { value: string; label: string }[] => {
-  const options = [];
+  const options: { value: string; label: string }[] = [];
   const today = new Date();
+
   for (let i = 0; i < 8; i++) {
     const date = new Date(today);
-    date.setDate(date.getDate() + i);
-    let label = "";
+    date.setDate(today.getDate() + i);
+
+    let label: string;
     if (i === 0) {
       label = "Today";
     } else if (i === 1) {
@@ -57,8 +59,10 @@ export const generateDateOptions = (): { value: string; label: string }[] => {
     } else {
       label = formatShortDate(date);
     }
+
     options.push({ value: date.toISOString().split("T")[0], label });
   }
+
   return options;
 };
 
@@ -66,14 +70,14 @@ export const generateDateOptionsPlus = (): {
   value: string;
   label: string;
 }[] => {
-  const options = [];
+  const options: { value: string; label: string }[] = [];
   const today = new Date();
 
   for (let i = -5; i <= 5; i++) {
     const date = new Date(today);
-    date.setDate(date.getDate() + i);
+    date.setDate(today.getDate() + i);
 
-    let label = "";
+    let label: string;
     if (i === 0) {
       label = "Today";
     } else if (i === 1) {
@@ -113,7 +117,8 @@ export const isTimeAtLeast30MinutesAway = (
   const now = new Date();
   const selectedDateTime = new Date(`${date}T${time}`);
 
-  const differenceInMinutes = (selectedDateTime - now) / (1000 * 60);
+  const differenceInMinutes =
+    (selectedDateTime.getTime() - now.getTime()) / (1000 * 60);
 
   return differenceInMinutes >= 30;
 };

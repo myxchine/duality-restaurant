@@ -1,8 +1,9 @@
-import React, { useEffect } from "react";
+import { useEffect, Suspense } from "react";
 import { supabase } from "@/lib/supabase";
 import Time from "@/components/admin/time";
 import DateSelect from "@/components/admin/DateSelectPlus";
 import { IoIosArrowRoundBack } from "react-icons/io";
+import Loading from "@/app/admin/loading";
 
 const TimeTable: React.FC<{
   selectedDate: string;
@@ -166,33 +167,35 @@ const TimeTable: React.FC<{
         </table>
       </div>
       <div className=" w-full min-h-[400px] space-y-2 ">
-        {reservations && reservations.length > 0 ? (
-          reservations.map((reservation: any) => (
-            <div
-              key={reservation.id}
-              className="flex flex-col bg-white bg-opacity-50 md:flex-row md:justify-between w-full justify-center align-middle items-left text-center p-4 md:p-8 shadow-md rounded-lg"
-            >
-              <div className="flex items-center p-4 pt-0 pl-0 md:p-0">
-                <p className="">
-                  {reservation.name} for {reservation.guests} at{" "}
-                  {reservation.time}
-                </p>
-              </div>
-              <div className="flex items-center space-x-2">
-                <div className="p-2 border bg-black  text-white uppercase text-xs rounded-xl flex items-center justify-center w-[100px]">
-                  <Time targetTime={`${selectedDate}T${reservation.time}`} />
+        <Suspense fallback={<Loading />}>
+          {reservations && reservations.length > 0 ? (
+            reservations.map((reservation: any) => (
+              <div
+                key={reservation.id}
+                className="flex flex-col bg-white bg-opacity-50 md:flex-row md:justify-between w-full justify-center align-middle items-left text-center p-4 md:p-8 shadow-md rounded-lg"
+              >
+                <div className="flex items-center p-4 pt-0 pl-0 md:p-0">
+                  <p className="">
+                    {reservation.name} for {reservation.guests} at{" "}
+                    {reservation.time}
+                  </p>
                 </div>
-                <div className="p-2 border  text-black border-black uppercase text-xs rounded-xl flex items-center justify-center w-[100px]">
-                  {reservation.status}
+                <div className="flex items-center space-x-2">
+                  <div className="p-2 border bg-black  text-white uppercase text-xs rounded-xl flex items-center justify-center w-[100px]">
+                    <Time targetTime={`${selectedDate}T${reservation.time}`} />
+                  </div>
+                  <div className="p-2 border  text-black border-black uppercase text-xs rounded-xl flex items-center justify-center w-[100px]">
+                    {reservation.status}
+                  </div>
                 </div>
               </div>
+            ))
+          ) : (
+            <div className="w-full  text-center  rounded-lg py-8 bg-white bg-opacity-50">
+              Nothing yet
             </div>
-          ))
-        ) : (
-          <div className="w-full  text-center  rounded-lg py-8 bg-white bg-opacity-50">
-            Nothing yet
-          </div>
-        )}
+          )}
+        </Suspense>
       </div>
     </div>
   );

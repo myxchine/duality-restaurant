@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/admin/header";
-import Footer from "@/components/admin/footer";
 import Sidebar from "@/components/admin/side-bar";
 import { MyProvider } from "./context";
 
@@ -20,14 +19,16 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${inter.className} flex`}>
-        <Sidebar />
-
-        <main className=" w-full">
-          <Header />
-
-          <MyProvider>{children}</MyProvider>
-        </main>
+      <body className={inter.className}>
+        <MyProvider>
+          <div className="flex">
+            <Sidebar />
+            <main className="w-full">
+              <Header />
+              {children}
+            </main>
+          </div>
+        </MyProvider>
       </body>
     </html>
   );

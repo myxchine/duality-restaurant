@@ -14,7 +14,7 @@ export default async function ProductPage({
   }
 
   return (
-    <main className="flex flex-col items-center justify-center fixed full-screen p-12 ">
+    <main className="flex flex-col items-center w-full justify-center fixed full-screen p-12 ">
       <div className=" rounded-lg p-8 shadow-md space-y-6 w-full max-w-lg   bg-white bg-opacity-30">
         <div className="w-full space-y-2">
           <h1 className="text-2xl font-bold uppercase">
