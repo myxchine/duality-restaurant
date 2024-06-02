@@ -4,7 +4,6 @@ import { useState, useContext } from "react";
 import { MyContext } from "./context";
 import { Reservation } from "@/utils/queries";
 import TimeTable from "@/components/admin/dayView";
-import { get } from "http";
 
 const getCurrentDate = (): string => {
   const today = new Date();
@@ -38,6 +37,7 @@ const AdminPage = () => {
           timeSlotsGuests={timeSlotsGuests}
           selectedDate={selectedDate}
           setSelectedDate={setSelectedDate}
+          getReservationsFromDateFromClient={getReservationsFromDateFromClient}
         />
       </div>
     </main>

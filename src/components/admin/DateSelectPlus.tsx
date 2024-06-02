@@ -16,7 +16,7 @@ const DateSelect: React.FC<DateSelectProps> = ({ value, onChange }) => (
       required
     >
       {generateDateOptionsPlus().map((option) => (
-        <option key={option.value} value={option.value}>
+        <option className="text-center" key={option.value} value={option.value}>
           {option.label}
         </option>
       ))}

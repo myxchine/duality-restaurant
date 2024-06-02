@@ -46,7 +46,7 @@ export const getReservationsFromDate = async (date: string) => {
       .from("reservations")
       .select("*")
       .order("date", { ascending: false })
-      .gte("date", date);
+      .eq("date", date);
 
     if (error) {
       throw error;

@@ -31,12 +31,14 @@ const MyProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [selectedDate, setSelectedDate] = useState<string>(getCurrentDate());
 
   const getRecentReservationsFromServer = useCallback(async () => {
+    setRecentReservations([]);
     const data = await getRecentReservations();
     setRecentReservations(data);
   }, []);
 
   const getReservationsFromDateFromServer = useCallback(
     async (date: string) => {
+      setReservationsFromDate([]);
       const data = await getReservationsFromDate(date);
       setReservationsFromDate(data);
     },

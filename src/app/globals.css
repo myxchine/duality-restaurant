@@ -20,7 +20,7 @@ body {
 }
 
 .sidebar {
-  height: calc(100svh - 120px);
+  height: 100svh;
 }
 
 .custom-select {

@@ -1,7 +1,8 @@
 import React, { useEffect } from "react";
 import { supabase } from "@/lib/supabase";
 import Time from "@/components/admin/time";
-import DateSelect from "@/reserve/form/DateSelectPlus";
+import DateSelect from "@/components/admin/DateSelectPlus";
+import { IoIosArrowRoundBack } from "react-icons/io";
 
 const TimeTable: React.FC<{
   selectedDate: string;
@@ -9,12 +10,14 @@ const TimeTable: React.FC<{
   timeSlotsGuests: any;
   reservations: any;
   setSelectedDate: any;
+  getReservationsFromDateFromClient: any;
 }> = ({
   timeSlotsGuests,
   selectedDate,
   setTimeSlotsGuests,
   reservations,
   setSelectedDate,
+  getReservationsFromDateFromClient,
 }) => {
   useEffect(() => {
     const fetchBookedSlots = async () => {
@@ -58,7 +61,7 @@ const TimeTable: React.FC<{
     };
 
     fetchBookedSlots();
-  }, [selectedDate, setTimeSlotsGuests]);
+  }, [selectedDate]);
 
   const generateTimeSlots = () => {
     const timeSlots = [];
@@ -81,37 +84,75 @@ const TimeTable: React.FC<{
   const timeSlots = generateTimeSlots();
 
   const getBackgroundColor = (guests: number) => {
-    if (!guests) return "bg-gray-500";
-    const red = Math.min(255, guests * 10); // Cap at 255
-    const green = Math.max(0, 255 - guests * 10); // Decrease as guests increase
+    if (!guests) return "bg-white";
+    const maxIntensity = 150; // Maximum intensity to keep colors muted
+    const red = Math.min(maxIntensity, guests * 10); // Cap at maxIntensity
+    const green = Math.max(0, maxIntensity - guests * 10); // Decrease as guests increase
     return `rgb(${red}, ${green}, 0)`; // Green to Red gradient
   };
 
-  return (
-    <div className="space-y-8 w-full">
-      <div className="rounded-lg p-8 shadow-md w-full bg-white bg-opacity-50 space-y-2">
-        <DateSelect
-          value={selectedDate}
-          onChange={(e) => setSelectedDate(e.target.value)}
-        />
+  const handleChangeDate = (e: any) => {
+    e.preventDefault();
+    const newDate = e.target.value;
+    setTimeSlotsGuests({}); // Clear time slots immediately
+    setSelectedDate(newDate);
+    getReservationsFromDateFromClient(newDate);
+  };
 
+  const addOneDay = () => {
+    const newDate = new Date(selectedDate);
+    newDate.setDate(newDate.getDate() - 1);
+    const newDateString = newDate.toISOString().slice(0, 10);
+    setTimeSlotsGuests({}); // Clear time slots immediately
+    setSelectedDate(newDateString);
+    getReservationsFromDateFromClient(newDateString);
+  };
+
+  const minusOneDay = () => {
+    const newDate = new Date(selectedDate);
+    newDate.setDate(newDate.getDate() + 1);
+    const newDateString = newDate.toISOString().slice(0, 10);
+    setTimeSlotsGuests({}); // Clear time slots immediately
+    setSelectedDate(newDateString);
+    getReservationsFromDateFromClient(newDateString);
+  };
+
+  return (
+    <div className="space-y-4 w-full">
+      <div className="">
+        <div className="flex items-center justify-between md:w-fit w-full rounded-xl bg-white bg-opacity-50 px-4 shadow-md">
+          <button className="" onClick={() => addOneDay()}>
+            <IoIosArrowRoundBack className="text-5xl p-2" />
+          </button>
+          <DateSelect value={selectedDate} onChange={handleChangeDate} />
+
+          <button className="" onClick={() => minusOneDay()}>
+            <IoIosArrowRoundBack
+              className="text-5xl p-2"
+              style={{ transform: "rotate(180deg)" }}
+            />
+          </button>
+        </div>
+      </div>
+
+      <div className="rounded-lg p-0 overflow-hidden shadow-md w-full bg-white bg-opacity-50 space-y-2 flex flex-col items-center hidden">
         <table className="table-auto w-full ">
-          <thead>
+          <thead className="display-none">
             <tr>
               {timeSlots.map((timeSlot) => (
                 <th className="display-none" key={timeSlot}></th>
               ))}
             </tr>
           </thead>
-          <tbody className="rounded-full border overflow-hidden">
-            <tr>
+          <tbody className="border-b border-black ">
+            <tr className=" ">
               {timeSlots.map((timeSlot) => (
                 <td
-                  className="text-xs font-regular border-none p-0"
+                  className="text-xs font-regular border-none p-0 rounded-xl"
                   key={timeSlot}
                 >
                   <div
-                    className="h-12 flex items-center bg-black bg-opacity-10 justify-center"
+                    className="h-8 flex items-center bg-white bg-opacity-10 justify-center"
                     style={{
                       backgroundColor: getBackgroundColor(
                         timeSlotsGuests[timeSlot]
@@ -129,7 +170,7 @@ const TimeTable: React.FC<{
           reservations.map((reservation: any) => (
             <div
               key={reservation.id}
-              className="flex flex-col bg-white bg-opacity-50 md:flex-row md:justify-between w-full justify-center align-middle items-left text-center p-8  shadow-md rounded-lg"
+              className="flex flex-col bg-white bg-opacity-50 md:flex-row md:justify-between w-full justify-center align-middle items-left text-center p-4 md:p-8 shadow-md rounded-lg"
             >
               <div className="flex items-center p-4 pt-0 pl-0 md:p-0">
                 <p className="">
@@ -138,17 +179,17 @@ const TimeTable: React.FC<{
                 </p>
               </div>
               <div className="flex items-center space-x-2">
-                <div className="p-2 border bg-blue-400 text-white uppercase text-xs rounded-xl flex items-center justify-center w-[100px]">
+                <div className="p-2 border bg-black  text-white uppercase text-xs rounded-xl flex items-center justify-center w-[100px]">
                   <Time targetTime={`${selectedDate}T${reservation.time}`} />
                 </div>
-                <div className="p-2 border bg-orange-400 text-white uppercase text-xs rounded-xl flex items-center justify-center w-[100px]">
+                <div className="p-2 border  text-black border-black uppercase text-xs rounded-xl flex items-center justify-center w-[100px]">
                   {reservation.status}
                 </div>
               </div>
             </div>
           ))
         ) : (
-          <div className="w-full  text-center font-bold rounded-lg py-8 bg-white bg-opacity-50">
+          <div className="w-full  text-center  rounded-lg py-8 bg-white bg-opacity-50">
             Nothing yet
           </div>
         )}
