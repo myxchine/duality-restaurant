@@ -30,6 +30,7 @@ body {
   background-color: transparent;
   cursor: pointer;
   text-align: center;
+  width: 100%;
 }
 
 @keyframes spin {
