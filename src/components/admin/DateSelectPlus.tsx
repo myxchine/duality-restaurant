@@ -10,7 +10,7 @@ const DateSelect: React.FC<DateSelectProps> = ({ value, onChange }) => (
     <select
       id="date"
       name="date"
-      className="custom-select text font-bold uppercase outline-none text-center"
+      className="custom-select outline-none font-bold text-center"
       value={value}
       onChange={onChange}
       required
