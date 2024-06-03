@@ -29,6 +29,7 @@ body {
   -moz-appearance: none;
   background-color: transparent;
   cursor: pointer;
+  text-align: center;
 }
 
 @keyframes spin {
@@ -46,4 +47,3 @@ body {
 .full-screen {
   height: 100svh;
 }
-
